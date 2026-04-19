@@ -15,7 +15,7 @@ export default function GraphTestPage() {
       <p className="text-gray-600 mb-4">
         等待配置 Neo4j 连接信息后即可显示图谱数据
       </p>
-      <KnowledgeGraph />
+      <KnowledgeGraph nodes={[]} links={[]} />
     </div>
   );
 }
