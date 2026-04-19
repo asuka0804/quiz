@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "bash ./scripts/build.sh",
+    "build": "next build",
     "dev": "next dev",
     "lint": "eslint",
     "start": "bash ./scripts/start.sh",
