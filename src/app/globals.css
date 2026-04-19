@@ -1,0 +1,315 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-vermillion: var(--vermillion);
+  --color-vermillion-foreground: var(--vermillion-foreground);
+  --color-gold: var(--gold);
+  --color-jade: var(--jade);
+  --color-ink: var(--ink);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --font-sans:
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  --font-serif:
+    'Noto Serif SC', 'Songti SC', 'SimSun', ui-serif, Georgia, Cambria,
+    'Times New Roman', Times, serif;
+}
+
+/* 古香古色主题 - 暖色调 */
+:root {
+  --radius: 0.5rem;
+  /* 宣纸质感背景 */
+  --background: #FAF5EF;
+  --foreground: #3D3D3D;
+  /* 卡片 - 古籍纸张色 */
+  --card: #FFFDF8;
+  --card-foreground: #3D3D3D;
+  /* 弹出层 */
+  --popover: #FFFDF8;
+  --popover-foreground: #3D3D3D;
+  /* 墨色主色调 */
+  --primary: #4A4A4A;
+  --primary-foreground: #FFFDF8;
+  /* 次要色 - 古铜 */
+  --secondary: #E8DFD5;
+  --secondary-foreground: #4A4A4A;
+  /* 柔和色调 */
+  --muted: #F0EBE3;
+  --muted-foreground: #6B6B6B;
+  /* 强调色 - 淡雅 */
+  --accent: #E8DFD5;
+  --accent-foreground: #4A4A4A;
+  /* 朱砂红 */
+  --destructive: #C75555;
+  /* 边框 */
+  --border: #D4C9BE;
+  --input: #E8DFD5;
+  --ring: #C75555;
+  /* 图表色 */
+  --chart-1: #C75555;
+  --chart-2: #8B7355;
+  --chart-3: #6B8E6B;
+  --chart-4: #8B7355;
+  --chart-5: #4A6B8A;
+  /* 侧边栏 */
+  --sidebar: #FAF5EF;
+  --sidebar-foreground: #3D3D3D;
+  --sidebar-primary: #C75555;
+  --sidebar-primary-foreground: #FFFDF8;
+  --sidebar-accent: #E8DFD5;
+  --sidebar-accent-foreground: #4A4A4A;
+  --sidebar-border: #D4C9BE;
+  --sidebar-ring: #C75555;
+  /* 自定义古色 */
+  --vermillion: #C75555;
+  --vermillion-foreground: #FFFDF8;
+  --gold: #B8860B;
+  --jade: #5F7A61;
+  --ink: #3D3D3D;
+}
+
+/* 深色模式 - 保持古典韵味 */
+.dark {
+  --background: #1A1815;
+  --foreground: #E8DFD5;
+  --card: #252220;
+  --card-foreground: #E8DFD5;
+  --popover: #252220;
+  --popover-foreground: #E8DFD5;
+  --primary: #E8DFD5;
+  --primary-foreground: #1A1815;
+  --secondary: #3D3835;
+  --secondary-foreground: #E8DFD5;
+  --muted: #3D3835;
+  --muted-foreground: #A0998F;
+  --accent: #3D3835;
+  --accent-foreground: #E8DFD5;
+  --destructive: #D46A6A;
+  --border: #4A4540;
+  --input: #3D3835;
+  --ring: #D46A6A;
+  --chart-1: #D46A6A;
+  --chart-2: #C9A86C;
+  --chart-3: #7A9A7A;
+  --chart-4: #C9A86C;
+  --chart-5: #6A8AAA;
+  --sidebar: #252220;
+  --sidebar-foreground: #E8DFD5;
+  --sidebar-primary: #D46A6A;
+  --sidebar-primary-foreground: #1A1815;
+  --sidebar-accent: #3D3835;
+  --sidebar-accent-foreground: #E8DFD5;
+  --sidebar-border: #4A4540;
+  --sidebar-ring: #D46A6A;
+  --vermillion: #D46A6A;
+  --vermillion-foreground: #1A1815;
+  --gold: #D4A84B;
+  --jade: #7A9A7A;
+  --ink: #E8DFD5;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+body {
+  @apply font-sans;
+}
+
+/* 古籍纹理背景 */
+.ancient-texture {
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(200, 180, 160, 0.1) 0%, transparent 60%),
+    linear-gradient(180deg, transparent 0%, rgba(200, 180, 160, 0.03) 100%);
+}
+
+/* 古典边框效果 */
+.ancient-border {
+  border: 2px solid var(--border);
+  border-image: linear-gradient(135deg, var(--border) 0%, var(--gold) 50%, var(--border) 100%) 1;
+  box-shadow: 
+    inset 0 0 20px rgba(200, 180, 160, 0.1),
+    0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* 印章效果 */
+.seal-effect {
+  position: relative;
+}
+.seal-effect::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 40px;
+  height: 40px;
+  background: var(--vermillion);
+  opacity: 0.9;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* 翻页动画 */
+@keyframes pageTurn {
+  0% { transform: rotateY(0deg); opacity: 1; }
+  50% { transform: rotateY(90deg); opacity: 0; }
+  100% { transform: rotateY(0deg); opacity: 1; }
+}
+
+.page-turn {
+  animation: pageTurn 0.6s ease-in-out;
+}
+
+/* 墨迹淡入效果 */
+@keyframes inkFadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.ink-fade-in {
+  animation: inkFadeIn 0.5s ease-out forwards;
+}
+
+/* 气泡效果 */
+@keyframes bubbleRise {
+  0% { transform: translateY(0) scale(1); opacity: 0.9; }
+  50% { transform: translateY(-5px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 0.9; }
+}
+
+.bubble-pulse {
+  animation: bubbleRise 2s ease-in-out infinite;
+}
+
+/* 答题正确动画 */
+@keyframes correctPulse {
+  0% { box-shadow: 0 0 0 0 rgba(95, 122, 97, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(95, 122, 97, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(95, 122, 97, 0); }
+}
+
+.correct-pulse {
+  animation: correctPulse 0.8s ease-out;
+}
+
+/* 答题错误动画 */
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.wrong-shake {
+  animation: wrongShake 0.6s ease-in-out;
+}
+/* 正确动画 - 绿色脉冲 */
+@keyframes correctPulse {
+  0% { 
+    transform: scale(1); 
+    background-color: var(--jade);
+    box-shadow: 0 0 0 0 rgba(95, 122, 97, 0.6);
+  }
+  50% { 
+    transform: scale(1.05); 
+    background-color: #8BAF8B;
+    box-shadow: 0 0 0 15px rgba(95, 122, 97, 0);
+  }
+  100% { 
+    transform: scale(1); 
+    background-color: var(--jade);
+    box-shadow: 0 0 0 0 rgba(95, 122, 97, 0);
+  }
+}
+
+.correct-pulse {
+  animation: correctPulse 0.5s ease-out;
+}
+
+/* 错误动画 - 红色抖动 */
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.wrong-shake {
+  animation: wrongShake 0.3s ease-in-out;
+}
+
+/* 气泡悬浮效果增强 */
+.bubble-pulse {
+  transition: all 0.2s ease;
+}
+
+.bubble-pulse:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
