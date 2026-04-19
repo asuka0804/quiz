@@ -84,16 +84,16 @@ export default function SettingsPage() {
                           {item.value}
                         </span>
                       )}
-                      {item.isToggle ? (
+                      {(item as any).isToggle ? (
                         <button
-                          onClick={item.onChange}
+                          onClick={(item as any).onChange}
                           className={`relative h-6 w-11 rounded-full transition-colors ${
-                            item.state ? "bg-primary" : "bg-muted"
+                            (item as any).state ? "bg-primary" : "bg-muted"
                           }`}
                         >
                           <span
                             className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
-                              item.state ? "left-[22px]" : "left-0.5"
+                              (item as any).state ? "left-[22px]" : "left-0.5"
                             }`}
                           />
                         </button>
