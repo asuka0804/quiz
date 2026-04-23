@@ -232,7 +232,7 @@ export default function RecitePage() {
             </div>
             <div>
               <h1 className="font-serif text-base font-bold">张仲景</h1>
-              <p className="text-xs text-muted-foreground">{isCallActive ? "通话中..." : "随时为您背诵条文"}</p>
+              <p className="text-xs text-muted-foreground">{isCallActive ? "通话中..." : "随时为您讲解原文"}</p>
             </div>
           </div>
           <button
