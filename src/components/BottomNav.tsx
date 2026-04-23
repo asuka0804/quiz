@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/quiz", icon: BookOpen, label: "答题" },
-  { href: "/recite", icon: Users, label: "条文背诵" },
+  { href: "/recite", icon: Users, label: "原文解惑" },
   { href: "/knowledge", icon: Network, label: "知识图谱" },
   { href: "/profile", icon: User, label: "我的" },
 ];
