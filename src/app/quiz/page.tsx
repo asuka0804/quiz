@@ -124,7 +124,8 @@ export default function QuizPage() {
             return (
               <Link
                 key={chapter.id}
-                href={`/quiz/${chapter.id}`}
+                // 👈 核心修改：跳转时带上查询参数 ?type=xxx
+                href={`/quiz/${chapter.id}?type=${chapter.id}`}
                 className={cn(
                   "group relative flex flex-col rounded-xl border p-4 transition-all duration-200 hover:shadow-lg",
                   colors.bg,
