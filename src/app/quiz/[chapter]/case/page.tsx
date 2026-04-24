@@ -103,7 +103,7 @@ function CaseAnalysisContent() {
     };
     const typeName = typeMap[type] || "伤寒杂病";
     
-    handleSend(`请给我出一个关于【${typeName}】的医案分析题。要求：内容精炼，直接返回JSON。`); 
+    handleSend(`请给我出一个关于【${typeName}】的医案分析题。要求：内容精炼，直接返回JSON。重要要求：返回的 case_data 中的 title 字段【绝对不能】包含具体的病名、证名或答案（如'阳明病'、'腑实证'等），请仅使用患者基本信息命名，例如：'张某，男，45岁 医案'。千万不要在标题泄露答案！`);
     
     // ⚠️ 关键修复：这里的依赖项只能有 type，不能放 handleSend，否则会导致无限重载死循环
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,8 +148,10 @@ function CaseAnalysisContent() {
             <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="font-serif text-lg font-semibold text-foreground">
-                  {currentCase.title || "仲景医案"}
-                </h2>
+  {currentCase.title?.includes("病") || currentCase.title?.includes("证") 
+    ? "【临证医案】请辨证分析" 
+    : (currentCase.title || "仲景医案")}
+</h2>
                 <span className="rounded-full bg-gold/10 px-3 py-1 text-xs font-medium text-gold">
                   难度：中等
                 </span>
@@ -260,7 +262,7 @@ function CaseAnalysisContent() {
                   onClick={() => { 
                     setApiHistory([]); 
                     const typeMap: Record<string, string> = { taiyang: "太阳病", yangming: "阳明病", shaoyang: "少阳病", taiyin: "太阴病", shaoyin: "少阴病", jueyin: "厥阴病" };
-                    handleSend(`请给我出一个关于【${typeMap[type] || "伤寒杂病"}】的医案分析题。要求：内容精炼，直接返回JSON。`); 
+                    handleSend(`请给我出一个关于【${typeMap[type] || "伤寒杂病"}】的医案分析题。要求：内容精炼，直接返回JSON。重要要求：title字段【绝对不能】包含病名或证名，请用'某某，男/女，X岁 医案'格式命名，切勿泄题！`); 
                   }}
                   className="mt-5 w-full rounded-lg bg-jade py-2.5 font-bold text-white shadow hover:bg-jade/90 transition-all active:scale-95"
                 >
