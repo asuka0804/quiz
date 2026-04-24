@@ -140,7 +140,8 @@ export default function ChapterQuizPage() {
             return (
               <Link
                 key={type.id}
-                href={`/quiz/${chapter}/${type.href}`}
+                // 👈 核心修改：在原本的路径后面加上 ?type=xxx 作为接力棒！
+                href={`/quiz/${chapter}/${type.href}?type=${chapter}`}
                 className={cn(
                   "group flex items-center gap-4 rounded-xl border p-4 transition-all duration-200",
                   colors.bg,
