@@ -2,31 +2,32 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation"; // 👈 新增：用于获取路由参数
 import { BottomNav } from "@/components/BottomNav";
 import { ScoreDisplay } from "@/components/ScoreDisplay";
 import { ChevronLeft, Send, Eye, Hand, Loader2, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function CaseAnalysisPage() {
+  const params = useParams(); // 👈 新增：获取当前病症类型
+  const type = params.type as string; 
+
   // --- 🌟 状态管理区 ---
   const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages] = useState<any[]>([]); // 界面显示的聊天
-  const [apiHistory, setApiHistory] = useState<any[]>([]); // 发给后端的完整上下文
+  const [messages, setMessages] = useState<any[]>([]); 
+  const [apiHistory, setApiHistory] = useState<any[]>([]); 
   const [isLoading, setIsLoading] = useState(false);
   
-  // 病案相关状态
   const [currentCase, setCurrentCase] = useState<any>(null);
   const [progress, setProgress] = useState({ syndrome: false, pathogenesis: false, prescription: false });
   const [isCompleted, setIsCompleted] = useState(false);
   const [finalAnswers, setFinalAnswers] = useState<any>(null);
   
-  // UI 交互状态
   const [showTongue, setShowTongue] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
   const [score, setScore] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 自动滚动到最新消息
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isCompleted]);
@@ -44,7 +45,6 @@ export default function CaseAnalysisPage() {
     setIsLoading(true);
 
     try {
-      // 请求我们新建的专有病案接口
       const res = await fetch("/api/coze/case", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,13 +56,11 @@ export default function CaseAnalysisPage() {
       
       const data = await res.json();
 
-      // 同步 API 历史记录（用于维持上下文）
-      if (textToSend !== "新病例") {
+      if (textToSend.includes("新病例") === false) {
         setApiHistory(prev => [...prev, { role: "user", content: textToSend, content_type: "text" }]);
       }
       setApiHistory(prev => [...prev, { role: "assistant", content: JSON.stringify(data), content_type: "text" }]);
 
-      // 🎯 状态路由：根据 AI 的 action 做出反应
       if (data.action === "new_case") {
         setCurrentCase(data.case_data);
         setMessages([{ role: "assistant", content: data.message }]);
@@ -80,7 +78,7 @@ export default function CaseAnalysisPage() {
         setMessages(prev => [...prev, { role: "assistant", content: data.message }]);
         setIsCompleted(true);
         setFinalAnswers(data.correct_answers);
-        setScore(prev => prev + 10); // 通关加分！
+        setScore(prev => prev + 10);
       }
 
     } catch (error) {
@@ -91,19 +89,29 @@ export default function CaseAnalysisPage() {
     }
   }, [inputMessage, isLoading, apiHistory]);
 
-  // 页面初次加载时，自动索要新病例
+  // --- 🎯 修改后的初始化逻辑：根据病症出题 ---
   useEffect(() => {
-    handleSend("新病例");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const typeMap: Record<string, string> = {
+      taiyang: "太阳病",
+      yangming: "阳明病",
+      shaoyang: "少阳病",
+      taiyin: "太阴病",
+      shaoyin: "少阴病",
+      jueyin: "厥阴病"
+    };
+    const typeName = typeMap[type] || "伤寒杂病";
+    
+    // 增加“精炼”要求，防止大模型话太多导致 Vercel 10秒超时
+    handleSend(`请给我出一个关于【${typeName}】的医案分析题。要求：内容精炼，直接返回JSON格式数据。`); 
+  }, [type, handleSend]);
 
   return (
     <div className="flex min-h-screen flex-col bg-background ancient-texture">
-      {/* 顶部区域 */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
+          {/* 👈 修改后的返回按钮：动态跳转 */}
           <Link
-            href="/quiz/taiyang"
+            href={`/quiz/${type || 'taiyang'}`}
             className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-muted"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -115,7 +123,6 @@ export default function CaseAnalysisPage() {
         </div>
       </header>
 
-      {/* 进度条 (根据 AI 的 progress 动态点亮) */}
       <div className="bg-background/80 border-b border-border py-2 px-4 shadow-sm sticky top-14 z-30">
         <div className="mx-auto max-w-lg flex justify-between text-xs font-medium">
           <span className={cn("flex items-center gap-1 transition-colors", progress.syndrome ? "text-jade" : "text-muted-foreground")}>
@@ -130,11 +137,8 @@ export default function CaseAnalysisPage() {
         </div>
       </div>
 
-      {/* 主内容区 */}
       <main className="flex-1 overflow-auto pb-32 pt-4">
         <div className="mx-auto max-w-lg px-4">
-          
-          {/* 病案信息卡片 */}
           {currentCase ? (
             <div className="mb-6 rounded-xl border border-border bg-card p-5 shadow-sm">
               <div className="mb-3 flex items-center justify-between">
@@ -149,7 +153,6 @@ export default function CaseAnalysisPage() {
                 {currentCase.description}
               </p>
 
-              {/* 舌脉按钮 */}
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowTongue(!showTongue)}
@@ -175,126 +178,5 @@ export default function CaseAnalysisPage() {
                 </button>
               </div>
 
-              {/* 舌象展示区 */}
               {showTongue && (currentCase.tongue_image || currentCase.tongue_desc) && (
-                <div className="mt-4 rounded-lg border border-gold/30 bg-gold/5 p-4 animate-in fade-in slide-in-from-top-2">
-                  <p className="mb-2 text-xs font-medium text-gold">舌象记录</p>
-                  <div className="rounded-lg bg-background p-3 text-sm text-center text-muted-foreground border border-border">
-                    {currentCase.tongue_image ? <img src={currentCase.tongue_image} alt="舌象" className="max-h-32 mx-auto rounded" /> : null}
-                    <p className="mt-2">{currentCase.tongue_desc || "舌象特征已包含在题干描述中"}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* 脉象展示区 */}
-              {showPulse && (currentCase.pulse_image || currentCase.pulse_desc) && (
-                <div className="mt-4 rounded-lg border border-gold/30 bg-gold/5 p-4 animate-in fade-in slide-in-from-top-2">
-                  <p className="mb-2 text-xs font-medium text-gold">脉象记录</p>
-                  <div className="rounded-lg bg-background p-3 text-sm text-center text-muted-foreground border border-border">
-                     {currentCase.pulse_image ? <img src={currentCase.pulse_image} alt="脉象" className="max-h-32 mx-auto rounded" /> : null}
-                     <p className="mt-2 font-mono text-primary font-bold text-lg">{currentCase.pulse_desc || "脉象特征已包含在题干描述中"}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-             <div className="mb-6 rounded-xl border border-border bg-card p-8 text-center shadow-sm flex flex-col items-center">
-                <Loader2 className="h-8 w-8 animate-spin text-gold mb-4" />
-                <p className="text-muted-foreground font-serif text-sm">正在为您调取医案卷宗...</p>
-             </div>
-          )}
-
-          {/* 聊天记录 */}
-          <div className="space-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}
-              >
-                <div
-                  className={cn(
-                    "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm",
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
-                      : "border border-border bg-card text-foreground rounded-bl-sm"
-                  )}
-                >
-                  {message.content}
-                  
-                  {/* AI 的 Hint 提示 */}
-                  {message.hint && (
-                    <div className="mt-3 rounded-lg border border-gold/40 bg-gold/10 p-3 text-xs text-amber-800">
-                      <span className="font-bold">💡 仲景提示：</span>{message.hint}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3 shadow-sm rounded-bl-sm">
-                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">仲景导师正在斟酌...</span>
-                </div>
-              </div>
-            )}
-
-            {/* 🎉 通关结算卡片 */}
-            {isCompleted && finalAnswers && (
-              <div className="mt-8 rounded-xl border border-jade/40 bg-[#f4fbf7] p-5 shadow-sm animate-in zoom-in-95 duration-500">
-                <div className="flex items-center gap-2 mb-4 border-b border-jade/20 pb-3">
-                  <CheckCircle className="h-6 w-6 text-jade" />
-                  <h3 className="text-lg font-serif font-bold text-jade">通关！仲景亲批处方笺</h3>
-                </div>
-                <div className="space-y-3 text-sm text-[#2d4a3e]">
-                  <p><span className="font-bold opacity-80">【诊断】</span> {finalAnswers.diagnosis}</p>
-                  <p><span className="font-bold opacity-80">【病机】</span> {finalAnswers.pathogenesis}</p>
-                  <p><span className="font-bold opacity-80">【治法】</span> {finalAnswers.treatment}</p>
-                  <p className="pt-2"><span className="font-bold opacity-80 text-base">【方药】</span> <span className="font-serif text-lg text-jade font-bold">{finalAnswers.prescription}</span></p>
-                </div>
-                <button 
-                  onClick={() => { setApiHistory([]); handleSend("新病例"); }}
-                  className="mt-5 w-full rounded-lg bg-jade py-2.5 font-bold text-white shadow hover:bg-jade/90 transition-all active:scale-95"
-                >
-                  挑战下一案
-                </button>
-              </div>
-            )}
-            
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-      </main>
-
-      {/* 底部输入框 */}
-      <div className="fixed bottom-16 left-0 right-0 z-30 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-lg gap-2">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder={isCompleted ? "已通关，请点击挑战下一案" : "输入您的辨证与方药分析..."}
-            disabled={isLoading || isCompleted}
-            className="flex-1 rounded-xl border border-border bg-card px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none disabled:opacity-50"
-          />
-          <button
-            onClick={() => handleSend()}
-            disabled={!inputMessage.trim() || isLoading || isCompleted}
-            className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-xl transition-all",
-              inputMessage.trim() && !isLoading && !isCompleted
-                ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            <Send className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-
-      <BottomNav />
-    </div>
-  );
-}
+                <div className="mt-4 rounded-lg border border-gold/30 bg
