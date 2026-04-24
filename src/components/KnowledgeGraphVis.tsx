@@ -3,28 +3,20 @@
 import { useEffect, useState } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 
-interface Node {
-  id: string;
-  name: string;
-  level?: number;
-  type?: string;
-  val?: number;
+interface KnowledgeGraphVisProps {
+  nodes: any[];
+  links: any[];
+  onNodeClick?: (node: any) => void;
 }
 
-interface Link {
-  source: string;
-  target: string;
-  type: string;
-}
-
-export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialLinks }: { nodes: Node[], links: Link[] }) {
+export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialLinks, onNodeClick }: KnowledgeGraphVisProps) {
   const [graphData, setGraphData] = useState({ nodes: initialNodes, links: initialLinks });
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  
+
   useEffect(() => {
     setGraphData({ nodes: initialNodes, links: initialLinks });
   }, [initialNodes, initialLinks]);
-  
+
   useEffect(() => {
     const updateDimensions = () => {
       setDimensions({
@@ -36,8 +28,7 @@ export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialL
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
-  
-  // 根据层级设置节点颜色
+
   const getNodeColor = (node: any) => {
     const level = node.level;
     if (level === 1) return '#FF6B6B';
@@ -47,8 +38,7 @@ export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialL
     if (level === 5) return '#FFEAA7';
     return '#DFE6E9';
   };
-  
-  // 根据层级设置节点大小
+
   const getNodeSize = (node: any) => {
     const level = node.level;
     if (level === 1) return 15;
@@ -56,11 +46,11 @@ export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialL
     if (level === 3) return 10;
     return 8;
   };
-  
+
   if (graphData.nodes.length === 0) {
     return <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>暂无图谱数据</div>;
   }
-  
+
   return (
     <ForceGraph2D
       graphData={graphData}
@@ -72,7 +62,11 @@ export default function KnowledgeGraphVis({ nodes: initialNodes, links: initialL
       linkDirectionalParticleSpeed={0.005}
       cooldownTicks={100}
       onNodeClick={(node) => {
-        alert(`📖 ${node.name}\n类型: ${node.type || '节点'}\n层级: ${node.level || '?'}`);
+        if (onNodeClick) {
+          onNodeClick(node);
+        } else {
+          alert(`点击了节点：${node.name}\n类型：${node.type || '节点'}\n层级：${node.level || '?'}`);
+        }
       }}
       width={dimensions.width}
       height={dimensions.height}
