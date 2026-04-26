@@ -256,23 +256,7 @@ function MainPage() {
             研习之道
           </h3>
           <div className="grid grid-cols-2 gap-3">
-            <QuickEntryCard
-              href="/quiz"
-              icon={
-                <svg
-                  className="h-7 w-7"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-                </svg>
-              }
-              title="答题研习"
-              subtitle="巩固所学"
-              color="vermillion"
-            />
+            {/* 1. 对话仲景 */}
             <QuickEntryCard
               href="/recite"
               icon={
@@ -287,9 +271,10 @@ function MainPage() {
                 </svg>
               }
               title="原文解惑"
-              subtitle="张仲景对话"
+              subtitle="对话仲景"
               color="jade"
             />
+            {/* 2. 知识图谱 */}
             <QuickEntryCard
               href="/knowledge"
               icon={
@@ -307,6 +292,25 @@ function MainPage() {
               subtitle="理清脉络"
               color="gold"
             />
+            {/* 3. 答题研习 */}
+            <QuickEntryCard
+              href="/quiz"
+              icon={
+                <svg
+                  className="h-7 w-7"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                </svg>
+              }
+              title="答题研习"
+              subtitle="巩固所学"
+              color="vermillion"
+            />
+            {/* 4. 我的研习 */}
             <QuickEntryCard
               href="/profile"
               icon={
