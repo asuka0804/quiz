@@ -324,7 +324,7 @@ export default function KnowledgePage() {
     fetchGraphWithQuery(initialQuery);
   }, []);
 
-  const fetchQuestionsByNode = async (nodeName: string, count: number = 10) => {
+  const fetchQuestionsByNode = async (nodeName: string, count: number = 5) => {
     const res = await fetch('/api/node-quiz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
