@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import { BookOpen, Users, Network, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// 调整了顺序并修改了文案，逻辑为：对话 -> 图谱 -> 答题 -> 我的
 const navItems = [
-  { href: "/quiz", icon: BookOpen, label: "答题" },
-  { href: "/recite", icon: Users, label: "原文解惑" },
+  { href: "/recite", icon: Users, label: "对话仲景" },
   { href: "/knowledge", icon: Network, label: "知识图谱" },
+  { href: "/quiz", icon: BookOpen, label: "答题" },
   { href: "/profile", icon: User, label: "我的" },
 ];
 
